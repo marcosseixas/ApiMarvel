@@ -1,2 +1,9 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using System;
+
+class ApiMarvel
+{
+    static void Main(string[] args)
+    {
+        Console.WriteLine("Hello friend.");
+    }
+}
