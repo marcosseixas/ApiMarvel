@@ -1,50 +1,22 @@
 ﻿using System;
+using ApiMarvel;
+using RestSharp;
 
-class ApiMarvel
+class GetCharacters
 {
     static void Main(string[] args)
     {
-        string best = "Hello my besto friendo";
-        string game = "Lets play a game?";
-        string button = "Press Y to continue...";
+        Credentials timestamp;
+        timestamp = new Credentials();
 
-        Console.WriteLine(best);
-        Console.WriteLine(game);
-        Console.WriteLine(button);
+        var hash = timestamp.Hash();
 
-        string key = Console.ReadKey().Key.ToString().ToUpper();
+        string url = "gateway.marvel.com/v1/public/characters?ts=" + timestamp.GetTimestamp() + "&apikey=" +  timestamp.public_key + "&hash=" + hash + "&limit=10";
 
-        if (key == "Y")
-        {
-            Console.WriteLine();
-            Console.WriteLine("Right Choise ma boyyy");
-            Console.WriteLine("Tight, tight, tight... Yeah.");
-            Console.WriteLine("So, question number one: what is my favorite food?");
-            Console.WriteLine();
-            Console.WriteLine("Letter A: Pizza");
-            Console.WriteLine("Letter B: Lasagna");
-            Console.WriteLine("Letter C: Lamen");
-            Console.WriteLine();
-            Console.WriteLine("Please Select your answer");
-
-            string answer_1 = Console.ReadKey().Key.ToString().ToUpper();
-            if (answer_1 == "C")
-            {
-                Console.WriteLine();
-                Console.WriteLine("Impossible, what a monster bro? Right answer!!!");
-            }
-            else
-            {
-                Console.WriteLine();
-                Console.WriteLine("Oh, not this time =/");
-            }
-        }
-        else
-        {
-            Console.WriteLine();
-            Console.WriteLine("Ok, see you next time =/, bye...");
-            Console.ReadLine();
-        }
-
+        var client = new RestClient(url);
+        //client.Timeout = -1;
+        var request = new RestRequest(Method.GET);
+        IRestResponse response = client.Execute(request);
+        Console.WriteLine(response.Content);
     }
 }
