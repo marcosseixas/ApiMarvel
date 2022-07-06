@@ -1,6 +1,6 @@
 ﻿using System;
 using ApiMarvel;
-using RestSharp;
+using System.Net.Http;
 
 class GetCharacters
 {
@@ -11,12 +11,21 @@ class GetCharacters
 
         var hash = timestamp.Hash();
 
-        string url = "gateway.marvel.com/v1/public/characters?ts=" + timestamp.GetTimestamp() + "&apikey=" +  timestamp.public_key + "&hash=" + hash + "&limit=10";
+        var url = new Uri("https://gateway.marvel.com/v1/public/characters?ts=" + timestamp.GetTimestamp() + "&apikey=" +  timestamp.public_key + "&hash=" + hash + "&limit=10");
 
-        var client = new RestClient(url);
-        //client.Timeout = -1;
-        var request = new RestRequest(Method.GET);
-        IRestResponse response = client.Execute(request);
-        Console.WriteLine(response.Content);
+        var result = GetPost(url);
+
+        Console.WriteLine(result);
     }
+
+    static object GetPost(Uri url)
+    {
+        using (var client = new HttpClient())
+        {
+            var result = client.GetAsync(url).Result;
+            var json = result.Content.ReadAsStringAsync().Result;
+            return json;
+        }
+    }
+
 }
